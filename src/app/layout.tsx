@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "theme-green min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
           inter.className
         )}
       >
@@ -31,6 +31,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
+          themes={["yellow", "light", "dark"]}
         >
           <Navbar>{children}</Navbar>
         </ThemeProvider>

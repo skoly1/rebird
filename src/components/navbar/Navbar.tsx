@@ -18,18 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Nav } from "./Nav";
-import {
-  AlertCircle,
-  Archive,
-  MessagesSquare,
-  Search,
-  ShoppingCart,
-  Users2,
-  Library,
-  ListMusic,
-  Disc3,
-  Radio,
-} from "lucide-react";
+import { Search, Home } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 
@@ -38,9 +27,24 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
   const { setTheme } = useTheme();
 
+  const [isCollapsed, setIsCollapsed] = React.useState(
+    window.innerWidth <= 650
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsCollapsed(window.innerWidth <= 650);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <>
       <TooltipProvider delayDuration={0}>
@@ -51,16 +55,17 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
               sizes
             )}`;
           }}
-          className="h-full max-h-[800px] items-stretch"
+          className="h-full max-h-[800px] items-stretch min-h-screen"
         >
           <ResizablePanel
-            defaultSize={265}
-            collapsedSize={4}
+            defaultSize={200}
+            collapsedSize={5}
             collapsible={true}
-            minSize={15}
-            maxSize={20}
+            minSize={10}
+            maxSize={15}
             onResize={(size) => {
-              if (size > 15) setIsCollapsed(false);
+              if (size > 10) setIsCollapsed(false);
+              setIsCollapsed(window.innerWidth <= 650);
             }}
             onCollapse={() => {
               setIsCollapsed(true);
@@ -77,31 +82,14 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
               isCollapsed={isCollapsed}
               links={[
                 {
-                  title: "Listen Now",
-                  icon: Library,
-                  variant: "default",
+                  title: "Home",
+                  icon: Home,
+                  href: "/",
                 },
                 {
                   title: "Search",
                   icon: Search,
-                  variant: "ghost",
-                },
-                {
-                  title: "Playlists",
-                  label: "",
-                  icon: ListMusic,
-                  variant: "ghost",
-                },
-                {
-                  title: "Albums",
-                  icon: Disc3,
-                  variant: "ghost",
-                },
-                {
-                  title: "Radio",
-                  label: "",
-                  icon: Radio,
-                  variant: "ghost",
+                  href: "/search",
                 },
               ]}
             />
@@ -111,9 +99,12 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
             <Button variant="link" onClick={() => setTheme("light")}>
               Light
             </Button>
+            <Button variant="link" onClick={() => setTheme("yellow")}>
+              Light
+            </Button>
             <Separator />
           </ResizablePanel>
-          <ResizableHandle withHandle />
+          <ResizableHandle withHandle disabled={window.innerWidth <= 650} />
           <ResizablePanel>{children}</ResizablePanel>
         </ResizablePanelGroup>
       </TooltipProvider>
@@ -122,18 +113,3 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
 };
 
 export default Navbar;
-
-// <Link href="/">Home</Link>
-//       <Link href="/profile">Profile</Link>
-//       <Sheet>
-//         <SheetTrigger>Open</SheetTrigger>
-//         <SheetContent side="left">
-//           <SheetHeader>
-//             <SheetTitle>Are you absolutely sure?</SheetTitle>
-//             <SheetDescription>
-//               This action cannot be undone. This will permanently delete your
-//               account and remove your data from our servers.
-//             </SheetDescription>
-//           </SheetHeader>
-//         </SheetContent>
-//       </Sheet>
