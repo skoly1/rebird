@@ -7,10 +7,12 @@ import { Movie, getMovies } from "@/api/api";
 import { MovieAlbum } from "@/components/movie/movieablum";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [movies, setMovies] = React.useState<Movie[]>([]);
+  const router = useRouter();
 
   const getMoviesData = async () => {
     setLoading(true);
@@ -23,7 +25,9 @@ const Home = () => {
     getMoviesData();
   }, []);
 
-  const handleMovieClick = () => {};
+  const handleMovieClick = (slug: string) => {
+    router.push(`/movie/${slug}`);
+  };
   return (
     <>
       <ScrollArea className="h-[100vh] w-100">
@@ -47,6 +51,7 @@ const Home = () => {
                           cover: movie.large_cover_image,
                           title: movie.title,
                           artist: movie.title_long,
+                          id: movie.id,
                         }}
                         className="w-[250px]"
                         aspectRatio="portrait"

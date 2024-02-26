@@ -7,7 +7,7 @@ interface MovieAlbumProps extends React.HTMLAttributes<HTMLDivElement> {
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
-  handleMovieClick: () => void;
+  handleMovieClick: (slug: string) => void;
 }
 
 export function MovieAlbum({
@@ -23,7 +23,7 @@ export function MovieAlbum({
     <div
       className={cn("space-y-3 cursor-pointer", className)}
       {...props}
-      onClick={() => handleMovieClick()}
+      onClick={() => handleMovieClick(album.id)}
     >
       <div className="overflow-hidden rounded-md">
         {/* eslint-disable-next-line @next/next/no-img-element */}
