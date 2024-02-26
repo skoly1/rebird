@@ -3,7 +3,6 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useDebounce } from "use-debounce";
 import { Movie, getMovies } from "@/api/api";
 import { MovieAlbum } from "@/components/movie/movieablum";
 import { ScrollArea } from "@/components/ui/scroll-area";
