@@ -7,10 +7,10 @@ import { useDebounce } from "use-debounce";
 import { Movie, getMovies } from "@/api/api";
 import { MovieAlbum } from "@/components/movie/movieablum";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 const Page = () => {
   const [searchText, setSearchText] = React.useState<string>("");
-  const [debouncedSearch] = useDebounce(searchText, 1000);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [openMovie, setOpenMovie] = React.useState<boolean>(false);
   const [movies, setMovies] = React.useState<Movie[]>(
@@ -18,25 +18,22 @@ const Page = () => {
       ? JSON.parse(localStorage.getItem("movies") ?? "")
       : []
   );
-  console.log(movies);
 
-  React.useEffect(() => {
-    const getMoviesData = async () => {
-      const data = await getMovies(debouncedSearch);
-      setMovies(data.data.data.movies);
-      localStorage.setItem("movies", JSON.stringify(data.data.data.movies));
-      setLoading(false);
-    };
-    if (debouncedSearch) {
-      setLoading(true);
-      getMoviesData();
-    }
-  }, [debouncedSearch]);
-
-  const handleMovieClick = () => {
-    setOpenMovie((prev) => !prev);
+  const getMoviesData = async () => {
+    setLoading(true);
+    const data = await getMovies(searchText);
+    setMovies(data.data.data.movies);
+    localStorage.setItem("movies", JSON.stringify(data.data.data.movies));
+    setLoading(false);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      getMoviesData();
+    }
+  };
+
+  const handleMovieClick = () => {};
   return (
     <>
       <ScrollArea className="h-[100vh] w-100">
@@ -50,8 +47,16 @@ const Page = () => {
             placeholder="Search movies..."
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
-            className={cn("max-w pl-10")}
+            className={cn("max-w-sm pl-10")}
+            onKeyDown={handleKeyDown}
           />
+          <Button
+            onClick={() => getMoviesData()}
+            className={cn("ml-2")}
+            variant="secondary"
+          >
+            Search
+          </Button>
         </div>
 
         {loading ? (
