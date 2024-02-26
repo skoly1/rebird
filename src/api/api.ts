@@ -17,7 +17,7 @@ interface Torrent {
   date_uploaded_unix: number;
 }
 
-interface Movie {
+export interface Movie {
   id: number;
   url: string;
   imdb_code: string;
@@ -61,39 +61,10 @@ interface Meta {
 }
 
 interface MoviesResponse {
-  data: {
-    status: string;
-    status_message: string;
-    data: Data;
-    "@meta": Meta;
-  };
-  status: number;
+  "@meta": Meta;
+  data: Data;
+  status: string;
   statusText: string;
-  headers: {
-    [key: string]: string;
-  };
-  config: {
-    transitional: {
-      silentJSONParsing: boolean;
-      forcedJSONParsing: boolean;
-      clarifyTimeoutError: boolean;
-    };
-    adapter: string[];
-    transformRequest: any[];
-    transformResponse: any[];
-    timeout: number;
-    xsrfCookieName: string;
-    xsrfHeaderName: string;
-    maxContentLength: number;
-    maxBodyLength: number;
-    env: {};
-    headers: {
-      Accept: string;
-    };
-    method: string;
-    url: string;
-  };
-  request: {};
 }
 
 export const getMovies = (

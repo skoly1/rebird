@@ -105,6 +105,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
             <Separator />
           </ResizablePanel>
           <ResizableHandle withHandle disabled={window.innerWidth <= 650} />
+          {/* <ResizablePanel className="!overflow-auto">{children}</ResizablePanel> */}
           <ResizablePanel>{children}</ResizablePanel>
         </ResizablePanelGroup>
       </TooltipProvider>
