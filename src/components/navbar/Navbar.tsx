@@ -1,14 +1,5 @@
 "use client";
 import React from "react";
-import Link from "next/link";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   Tooltip,
   TooltipContent,
@@ -26,6 +17,7 @@ import { Nav } from "./Nav";
 import { Search, Home, SunMoon, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
+import useDeviceSize from "@/hooks/useDeviceSize";
 
 interface NavbarProps {
   children?: React.ReactNode;
@@ -33,23 +25,10 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ children }) => {
   const { setTheme } = useTheme();
+  const [width, height] = useDeviceSize();
 
-  const [isCollapsed, setIsCollapsed] = React.useState(
-    window.innerWidth <= 650
-  );
+  const [isCollapsed, setIsCollapsed] = React.useState(width <= 650);
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      setIsCollapsed(window.innerWidth <= 650);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
     <>
       <TooltipProvider delayDuration={0}>
@@ -70,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
             maxSize={15}
             onResize={(size) => {
               if (size > 10) setIsCollapsed(false);
-              setIsCollapsed(window.innerWidth <= 650);
+              setIsCollapsed(width <= 650);
             }}
             onCollapse={() => {
               setIsCollapsed(true);
@@ -136,7 +115,7 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
             </div>
             <Separator />
           </ResizablePanel>
-          <ResizableHandle withHandle disabled={window.innerWidth <= 650} />
+          <ResizableHandle withHandle disabled={width <= 650} />
           {/* <ResizablePanel className="!overflow-auto">{children}</ResizablePanel> */}
           <ResizablePanel>{children}</ResizablePanel>
         </ResizablePanelGroup>
