@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/Themeprovider";
@@ -9,7 +8,7 @@ import { ThemeProvider } from "@/components/Themeprovider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ReBird",
+  title: "ReBird Home",
   description: "ReBird is a Manager for Real Debrid Account",
 };
 
@@ -20,6 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="icon"
+          href="/bird.png"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",

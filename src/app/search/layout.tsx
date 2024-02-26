@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ReBird Profile",
-  description: "ReBird is a Manager for Real Debrid Account",
+  title: "Search Movies",
+  description: "ReBird is a movie search engine.",
 };
 
 export default function ProfileLayout({
