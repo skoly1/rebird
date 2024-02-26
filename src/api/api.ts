@@ -68,8 +68,8 @@ interface MoviesResponse {
 }
 
 export const getMovies = (
-  search?: string
+  params?: string
 ): Promise<AxiosResponse<MoviesResponse>> => {
-  const url = `${process.env.NEXT_PUBLIC_TRT_URL}?query_term=${search}`;
+  const url = `${process.env.NEXT_PUBLIC_TRT_URL}${params ? "?" + params : ""}`;
   return axios.get(url);
 };

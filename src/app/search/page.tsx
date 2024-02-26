@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn, toQueryString } from "@/lib/utils";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Movie, getMovies } from "@/api/api";
@@ -17,20 +17,28 @@ const Page = () => {
       ? JSON.parse(localStorage.getItem("movies") ?? "")
       : []
   );
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const getMoviesData = async () => {
     setLoading(true);
-    const data = await getMovies(searchText);
+    const params = toQueryString({ query_term: searchText });
+    const data = await getMovies(params);
     setMovies(data.data.data.movies);
     localStorage.setItem("movies", JSON.stringify(data.data.data.movies));
     setLoading(false);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && searchText) {
       getMoviesData();
     }
   };
+
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const handleMovieClick = () => {};
   return (
@@ -48,11 +56,14 @@ const Page = () => {
             onChange={(event) => setSearchText(event.target.value)}
             className={cn("max-w-sm pl-10")}
             onKeyDown={handleKeyDown}
+            // autoFocus
+            ref={inputRef}
           />
           <Button
             onClick={() => getMoviesData()}
-            className={cn("ml-2")}
+            className={cn("ml-2 bg-primary text-white hover:bg-primary-dark")}
             variant="secondary"
+            disabled={!searchText}
           >
             Search
           </Button>

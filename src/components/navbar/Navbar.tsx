@@ -9,7 +9,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -18,7 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Nav } from "./Nav";
-import { Search, Home } from "lucide-react";
+import { Search, Home, SunMoon, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 
@@ -93,15 +98,42 @@ const Navbar: React.FC<NavbarProps> = ({ children }) => {
                 },
               ]}
             />
-            <Button variant="link" onClick={() => setTheme("dark")}>
-              Dark
-            </Button>
-            <Button variant="link" onClick={() => setTheme("light")}>
-              Light
-            </Button>
-            <Button variant="link" onClick={() => setTheme("yellow")}>
-              Light
-            </Button>
+            <div className={cn("flex items-center justify-center flex-wrap")}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-9 px-0"
+                    onClick={() => setTheme("light")}
+                  >
+                    <SunMoon className="h-[1.2rem] w-[1.2rem] scale-100 transition-all dark:rotate-0 dark:scale-100" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="flex items-center gap-4"
+                >
+                  Light Mode
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-9 px-0"
+                    onClick={() => setTheme("dark")}
+                  >
+                    <Moon className="h-[1.2rem] w-[1.2rem] scale-100 transition-all dark:rotate-0 dark:scale-100" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="flex items-center gap-4"
+                >
+                  Dark Mode
+                </TooltipContent>
+              </Tooltip>
+            </div>
             <Separator />
           </ResizablePanel>
           <ResizableHandle withHandle disabled={window.innerWidth <= 650} />
