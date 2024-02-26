@@ -8,25 +8,38 @@ import { MovieAlbum } from "@/components/movie/movieablum";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const Page = () => {
   const [searchText, setSearchText] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
   const [openMovie, setOpenMovie] = React.useState<boolean>(false);
-  const [movies, setMovies] = React.useState<Movie[]>(
-    localStorage.getItem("movies")
-      ? JSON.parse(localStorage.getItem("movies") ?? "")
-      : []
-  );
+  const [movies, setMovies] = React.useState<Movie[]>([]);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalCount, setTotalCount] = React.useState(0);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const itemsPerPage = 20;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
-  const getMoviesData = async () => {
+  const getMoviesData = async (page?: number) => {
     setLoading(true);
-    const params = toQueryString({ query_term: searchText });
+    const params = toQueryString({
+      query_term: searchText,
+      page: page || currentPage,
+      limit: itemsPerPage,
+    });
     const data = await getMovies(params);
     setMovies(data.data.data.movies);
-    localStorage.setItem("movies", JSON.stringify(data.data.data.movies));
+    setTotalCount(data.data.data.movie_count);
     setLoading(false);
   };
 
@@ -44,6 +57,25 @@ const Page = () => {
 
   const handleMovieClick = (slug: string) => {
     router.push(`/movie/${slug}`);
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      getMoviesData(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      getMoviesData(currentPage + 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    getMoviesData(pageNumber);
   };
   return (
     <>
@@ -104,6 +136,50 @@ const Page = () => {
                     );
                   })}
                 </div>
+                <Pagination className="pb-4">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious onClick={handlePrevious} />
+                    </PaginationItem>
+                    {[...Array(totalPages)].map((_, index) => {
+                      // Only render links for the current page, 2 pages on either side, the first page, and the last page
+                      if (
+                        index + 1 === currentPage ||
+                        index + 1 === currentPage - 1 ||
+                        index + 1 === currentPage - 2 ||
+                        index + 1 === currentPage + 1 ||
+                        index + 1 === currentPage + 2 ||
+                        index + 1 === 1 ||
+                        index + 1 === totalPages
+                      ) {
+                        return (
+                          <PaginationItem key={index}>
+                            <PaginationLink
+                              isActive={currentPage === index + 1}
+                              onClick={() => handlePageChange(index + 1)}
+                            >
+                              {index + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      }
+                      // Render an ellipsis if the page is just outside the range of 2 pages on either side of the current page
+                      else if (
+                        index + 1 === currentPage - 3 ||
+                        index + 1 === currentPage + 3
+                      ) {
+                        return (
+                          <PaginationItem key={index}>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      }
+                    })}
+                    <PaginationItem>
+                      <PaginationNext onClick={handleNext} />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               </>
             )}
           </>
