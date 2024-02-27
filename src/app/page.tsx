@@ -84,6 +84,7 @@ const Home = () => {
                           title: movie.title,
                           artist: movie.title_long,
                           id: movie.id,
+                          name: movie.title_long,
                         }}
                         className="w-[250px]"
                         aspectRatio="portrait"
