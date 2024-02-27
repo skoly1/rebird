@@ -4,14 +4,20 @@ import React from "react";
 import { getMovie } from "@/api/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Movie } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, openMagnet } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, Loader2 } from "lucide-react";
+import { Download, Loader2, Magnet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { MovieAlbum } from "@/components/movie/movieablum";
 import { Actor } from "@/components/actor/actor";
 import { Separator } from "@/components/ui/separator";
 import SuggestedMovies from "@/components/SuggestedMovies/suggestedMovies";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MoviePageProps {
   params: {
@@ -78,16 +84,41 @@ export default function DocPage({ params }: MoviePageProps) {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-4">
               {movie?.torrents.map((torrent, index) => {
                 return (
-                  <Card
-                    key={index}
-                    onClick={() => handleClick(torrent.url)}
-                    className="cursor-pointer hover:scale-105 transition-all"
-                  >
+                  <Card key={index} className="cursor-pointer">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0  p-4 pb-0">
                       <CardTitle className="text-sm font-medium">
                         {torrent.quality}
                       </CardTitle>
-                      <Download />
+                      <div className="flex">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Magnet
+                                className="hover:scale-150 transition-all"
+                                onClick={() =>
+                                  openMagnet(torrent.hash, movie.title)
+                                }
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Open Magnet Link</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Download
+                                className="ml-8 hover:scale-150 transition-all"
+                                onClick={() => handleClick(torrent.url)}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Download Torrent</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                     </CardHeader>
                     <CardContent className="p-4 pb-1">
                       <div className="text-2xl font-bold">{torrent.size}</div>
@@ -107,7 +138,12 @@ export default function DocPage({ params }: MoviePageProps) {
                 );
               })}
             </div>
-            {movie.cast && <Separator className="my-4" />}
+            {movie.cast && (
+              <>
+                <Separator className="my-4" />
+                <h2 className="text-3xl font-bold tracking-tight mb-4">Cast</h2>
+              </>
+            )}
 
             <div className="flex items-start justify-between">
               {movie.cast?.map((actor, index) => {
@@ -124,7 +160,7 @@ export default function DocPage({ params }: MoviePageProps) {
             </div>
             <Separator className="mt-8 mb-4" />
             <h2 className="text-3xl font-bold tracking-tight">
-              Similar Movies
+              Suggested Movies
             </h2>
             <SuggestedMovies movieId={movieId} />
           </div>

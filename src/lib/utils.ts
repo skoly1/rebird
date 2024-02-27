@@ -12,3 +12,13 @@ export function toQueryString(params: { [key: string]: any }) {
     )
     .join("&");
 }
+
+export const copyMagnet = async (TORRENT_HASH: string, movieName: string) => {
+  const magnetLink = `magnet:?xt=urn:btih:${TORRENT_HASH}&dn=${movieName}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
+  await navigator.clipboard.writeText(magnetLink);
+};
+
+export const openMagnet = (TORRENT_HASH: string, movieName: string) => {
+  const magnetLink = `magnet:?xt=urn:btih:${TORRENT_HASH}&dn=${movieName}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
+  window.open(magnetLink, '_blank');
+};
