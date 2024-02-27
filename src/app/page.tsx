@@ -74,7 +74,7 @@ const Home = () => {
           <>
             {movies?.length > 0 && (
               <>
-                <div className="flex flex-row flex-wrap justify-center gap-5 py-4">
+                <div className="flex flex-row flex-wrap justify-center gap-5 py-4 px-2">
                   {movies?.map((movie) => {
                     return (
                       <MovieAlbum
