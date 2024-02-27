@@ -5,15 +5,13 @@ import { getMovie } from "@/api/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Movie } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
+import { MovieAlbum } from "@/components/movie/movieablum";
+import { Actor } from "@/components/actor/actor";
+import { Separator } from "@/components/ui/separator";
+import SuggestedMovies from "@/components/SuggestedMovies/suggestedMovies";
 
 interface MoviePageProps {
   params: {
@@ -109,6 +107,26 @@ export default function DocPage({ params }: MoviePageProps) {
                 );
               })}
             </div>
+            {movie.cast && <Separator className="my-4" />}
+
+            <div className="flex items-start justify-between">
+              {movie.cast?.map((actor, index) => {
+                return (
+                  <Actor
+                    key={index}
+                    character_name={actor.character_name}
+                    imdb_code={actor.imdb_code}
+                    name={actor.name}
+                    url_small_image={actor.url_small_image}
+                  />
+                );
+              })}
+            </div>
+            <Separator className="mt-8 mb-4" />
+            <h2 className="text-3xl font-bold tracking-tight">
+              Similar Movies
+            </h2>
+            <SuggestedMovies movieId={movieId} />
           </div>
         </>
       )}

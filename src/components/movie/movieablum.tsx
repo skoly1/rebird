@@ -3,7 +3,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface MovieAlbumProps extends React.HTMLAttributes<HTMLDivElement> {
-  album: any;
+  album: {id: string, cover: string, title: string, artist: string, name: string};
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;

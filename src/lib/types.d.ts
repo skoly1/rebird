@@ -15,8 +15,15 @@ interface Torrent {
   date_uploaded_unix: number;
 }
 
+interface Actor {
+  character_name: string;
+  imdb_code: string;
+  name: string;
+  url_small_image: string;
+}
+
 export interface Movie {
-  id: number;
+  id: string;
   url: string;
   imdb_code: string;
   title: string;
@@ -27,6 +34,7 @@ export interface Movie {
   rating: number;
   runtime: number;
   genres: string[];
+  cast: Actor[];
   like_count: number;
   description_intro: string;
   description_full: string;

@@ -122,6 +122,7 @@ const Page = () => {
                       <MovieAlbum
                         key={movie.id}
                         album={{
+                          name: movie.title,
                           cover: movie.large_cover_image,
                           title: movie.title,
                           artist: movie.title_long,

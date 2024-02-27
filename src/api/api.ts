@@ -22,7 +22,7 @@ interface Torrent {
 }
 
 export interface Movie {
-  id: number;
+  id: string;
   url: string;
   imdb_code: string;
   title: string;
@@ -81,6 +81,11 @@ export const getMovies = (
 };
 
 export const getMovie = (id: string) => {
-  const url = `${process.env.NEXT_PUBLIC_MOVIE_DETAILS_TRT_URL}?movie_id=${id}`;
+  const url = `${process.env.NEXT_PUBLIC_MOVIE_DETAILS_TRT_URL}?movie_id=${id}&with_images=true&with_cast=true`;
+  return axios.get(url);
+};
+
+export const getSuggestedMovies = (id: string) => {
+  const url = `${process.env.NEXT_PUBLIC_SUGGESTED_MOVIE_DETAILS_TRT_URL}?movie_id=${id}`;
   return axios.get(url);
 };
