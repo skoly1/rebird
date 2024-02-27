@@ -1,4 +1,8 @@
 import axios, { AxiosResponse } from "axios";
+import axiosRetry from "axios-retry";
+
+// Configure axios-retry
+axiosRetry(axios, { retries: 3 }); // Replace 3 with the number of retries you want
 
 interface Torrent {
   url: string;
