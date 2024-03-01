@@ -57,7 +57,7 @@ export default function DocPage({ params }: MoviePageProps) {
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={movie?.background_image}
+            src={movie?.large_screenshot_image1 || movie.background_image}
             alt={movie?.title}
             className={cn(
               "h-auto w-auto object-cover transition-all hover:scale-110 cursor-pointer"
@@ -67,13 +67,23 @@ export default function DocPage({ params }: MoviePageProps) {
             <h2 className="text-3xl font-bold tracking-tight">
               {movie?.title_long || movie?.title}
             </h2>
-
+            <p className="text-xs text-muted-foreground">
+              {movie?.description_full}
+            </p>
             <Badge
               variant="outline"
               className="mr-2 bg-primary text-white mt-4"
             >
               IMDB Rating: {movie?.rating}
             </Badge>
+            {movie?.runtime && (
+              <Badge
+                variant="outline"
+                className="mr-2 bg-[#facc15] text-[#422006] mt-4"
+              >
+                Runtime: {movie?.runtime} Mins
+              </Badge>
+            )}
             {movie?.genres.map((genre, index) => {
               return (
                 <Badge key={index} variant="outline" className="mr-2">
