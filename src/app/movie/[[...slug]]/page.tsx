@@ -76,14 +76,12 @@ export default function DocPage({ params }: MoviePageProps) {
             >
               IMDB Rating: {movie?.rating}
             </Badge>
-            {movie?.runtime && (
-              <Badge
-                variant="outline"
-                className="mr-2 bg-[#facc15] text-[#422006] mt-4"
-              >
-                Runtime: {movie?.runtime} Mins
-              </Badge>
-            )}
+            <Badge
+              variant="outline"
+              className="mr-2 bg-[#facc15] text-[#422006] mt-4"
+            >
+              Runtime: {movie?.runtime === 0 ? "NA" : movie.runtime + "Mins"}
+            </Badge>
             {movie?.genres.map((genre, index) => {
               return (
                 <Badge key={index} variant="outline" className="mr-2">
