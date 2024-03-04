@@ -28,15 +28,17 @@ interface MoviePageProps {
 export default function DocPage({ params }: MoviePageProps) {
   const movieId = params.slug.join("/") ?? null;
 
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<boolean>(false);
   const [movie, setMovie] = React.useState<Movie | null>(null);
 
   React.useEffect(() => {
     const getMoviesData = async () => {
-      setLoading(true);
-      const data = await getMovie(movieId);
-      setMovie(data.data.data.movie);
-      setLoading(false);
+      try {
+        const data = await getMovie(movieId);
+        setMovie(data.data.data.movie);
+      } catch (error) {
+        setError(true);
+      }
     };
 
     getMoviesData();
@@ -53,7 +55,12 @@ export default function DocPage({ params }: MoviePageProps) {
 
   return (
     <ScrollArea className="h-[100vh] w-100">
-      {movie && (
+      {error && (
+        <p className="p-20">
+          Something went wrong.!! Please use a vpn to access
+        </p>
+      )}
+      {movie && !error && (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -175,7 +182,7 @@ export default function DocPage({ params }: MoviePageProps) {
         </>
       )}
 
-      {!movie && (
+      {!movie && !error && (
         <div className="flex items-start justify-center text-sm text-muted-foreground h-[100vh]">
           <div className="flex items-center mt-10">
             <Loader2 className="mr-2 h-10 w-10 animate-spin" />
